@@ -1,0 +1,15 @@
+@import helper._
+
+@(userForm: Form[UserData])
+
+@main("Scala Play forms tutorial") {
+<h1>Scala Play forms tutorial</h1>
+
+@form(action = routes.HomeController.submit()) {
+@inputText(userForm("username"))
+
+@inputText(userForm("password"))
+
+<input type="submit" value="Submit">
+}
+}
