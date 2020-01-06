@@ -9,15 +9,28 @@ import play.api.mvc._
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class HomeController @Inject()(messagesAction: MessagesActionBuilder, components: ControllerComponents) extends AbstractController(components) {
 
-  def login() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.login(UserData.form))
+  def list() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.list())
+  }
+  def login() = messagesAction { implicit request: MessagesRequest[AnyContent] =>
+    Ok(views.html.login(UserData.userFormConstraintsAdHoc))
   }
 
-  def submit() = Action { implicit request =>
-    val formData: UserData = UserData.form.bindFromRequest.get // Careful: BasicForm.form.bindFromRequest returns an Option
-    Ok(formData.toString) // just returning the data because it's an example :)
+  def submit() = messagesAction { implicit request: MessagesRequest[AnyContent] =>
+    UserData.userFormConstraintsAdHoc.bindFromRequest.fold(
+      formWithErrors => {
+        println("hello Error")
+        BadRequest(views.html.login(formWithErrors))
+      },
+      formData => {
+        //val contactId = UserData.save(contact)
+        //Redirect(routes.HomeController.showContact(contactId)).flashing("success" -> "Contact saved!")
+        println("hello success")
+        Redirect(routes.HomeController.list()).flashing("success" -> "Contact saved!")
+      }
+    )
   }
 
 

@@ -1,15 +1,15 @@
 @import helper._
 
-@(userForm: Form[UserData])
+@(userFormConstraintsAdHoc: Form[UserData])(implicit request: MessagesRequestHeader)
 
-@main("Scala Play forms tutorial") {
-<h1>Scala Play forms tutorial</h1>
+<h1>Login Page to your blogs</h1>
 
 @form(action = routes.HomeController.submit()) {
-@inputText(userForm("username"))
+@CSRF.formField                     @* <- takes a RequestHeader    *@
+@inputText(userFormConstraintsAdHoc("username")) @* <- takes a MessagesProvider *@
 
-@inputText(userForm("password"))
+@inputText(userFormConstraintsAdHoc("password")) @* <- takes a MessagesProvider *@
 
 <input type="submit" value="Submit">
 }
-}
+

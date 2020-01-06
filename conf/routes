@@ -4,6 +4,7 @@
 # ~~~~
 
 # An example controller showing a sample home page
+GET     /                                   controllers.HomeController.list
 GET     /login                              controllers.HomeController.login
 POST    /login                              controllers.HomeController.submit
 
